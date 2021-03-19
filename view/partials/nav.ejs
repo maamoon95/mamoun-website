@@ -1,0 +1,16 @@
+<!-- Nav -->
+<nav id="nav">
+    <ul>
+      
+            <!--هون عم نستخدم ال if لاضافة كلاس على الكتبسة حسب الصفحة-->
+        <li><a href="/"  <% if(urrl==="/"){ %> class =  <%- active %> <% } %>>Home Page</a></li>
+ 
+    
+        <li><a href="/about" <% if(urrl==="/about"){ %> class =  <%- active %> <% } %> >About</a></li>
+        
+
+        <li><a href="/blogs/create" <% if(urrl==="/blogs/create"){ %> class =  <%- active %> <% } %> >Create Post</a></li>
+        <li><a href="/asdasd" <% if(urrl==="/asdasd"){ %> class =  <%- active %> <% } %> >404 test</a></li>
+    
+    </ul>
+</nav>
