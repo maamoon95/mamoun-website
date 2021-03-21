@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>
+<!--
+	Stellar by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<%- include('./partials/head.ejs') %>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header" class="alt">
+						<span class="logo"><img src="images/logo.svg" alt="" /></span>
+						<h1>Training website</h1>
+						<p>fully responsive template with node backend<br />
+						built by <a href="#">Mamoon</a> for <a href="#">Mohammed alzawawi</a>.</p>
+					</header>
+
+				<!-- Nav -->
+				<%- include('./partials/nav.ejs') %>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Introduction -->
+						<section id="blogs"  class="main special">
+							<header class="major">
+								<h2>Single blog</h2>
+								<p></p>
+							</header>
+						
+                        <section>
+									
+                            <% if (locals.message) { %>
+                                <script>
+                                    
+                                      alert("<%- message.msg;  %>");
+                                    
+                                    </script>
+                              <% } %>
+                            <h2>Type in your amazing post</h2>
+              
+                      
+                        </section>
+						<section>
+								<% console.log( blogs ); %>
+								<% if (blogs.length != '') { %>
+									
+										<section class="main">
+									
+										<header class="major">
+											
+										<h2>Titlet: <%= blogs.title %> </h2>
+										<p>ID: <%= blogs.id %> </p>
+										<p>Snippet: <%= blogs.snippet %> </p>
+										<p>Body: <%= blogs.body %> </p>
+									
+									</header>
+								</section>
+								
+									<% } %>
+						
+						
+						</section>
+                        <section id="blogs"  class="main special">
+							<header class="major">
+								<h2>Edit post here</h2>
+								<p></p>
+							</header>
+                        </section>
+                        <form method="post" action="/blogs">
+                            <div class="row gtr-uniform">
+                                <div class="col-6 col-12-xsmall">
+                                    <input type="text" name="title" id="demo-name" value="" placeholder="Title" class="readonly" readonly />
+                                </div>
+                                <div class="col-6 col-12-xsmall">
+                                    <input type="text" name="snippet" id="demo-name" value="" placeholder="snippet" />
+                                </div>
+                                <div class="col-12">
+                                    <textarea name="body" id="demo-message" placeholder="Enter your message" rows="6"></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <ul class="actions">
+                                        <li><input type="submit" value="Send Message" class="primary" /></li>
+                                      
+                                    </ul>
+                                
+                                </div>
+                            </div>
+                        </form>
+                    <div>
+                   
+                        <li><input type="button" id="delete" value="Delete post" class="primary" data-loc="<%= blogs.id %>" name="delete" /></li>
+                        <script>
+                            const trashcan = document.getElementById('delete');
+                            trashcan.addEventListener('click', (e) => {
+                              const endpoint = `/blogs/<%= blogs.id %>`;
+                              fetch(endpoint, {
+                                method: 'DELETE',
+                              })
+                              
+                              .then(response => response.json())
+                              .then(data => window.location.href = data.redirect)
+                              .then(alert('Post with ID: <%= blogs.id %> \ndeleted seccusfully'))
+                              .catch(err => console.log(err));
+                            });
+                            
+                          </script>
+                    </div>
+
+					</div>
+
+				<!-- Footer -->
+				<%- include('./partials/footer.ejs') %>
+
+			</div>
+
+		<!-- Scripts -->
+		<%- include('./partials/scripts.ejs') %>
+
+	</body>
+</html>

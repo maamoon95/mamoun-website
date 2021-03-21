@@ -26,6 +26,33 @@
 					<div id="main">
 
 						<!-- Introduction -->
+						<section id="blogs"  class="main special">
+							<header class="major">
+								<h2>blogs</h2>
+								<p>blogs are loaded from mongodb and displayed below</p>
+							</header>
+						</section>
+								
+								<% //console.log( blogs ); %>
+								<% if (blogs.length > 0) { %>
+									<% blogs.forEach(blog => { %>
+										<section class="main">
+									
+										<header class="major">
+											<a href="/post/<%= blog.id %>">
+										<h2>Titlet: <%= blog.title %> </h2>
+										<p>ID: <%= blog.id %> </p>
+										<p>Snippet: <%= blog.snippet %> </p>
+										<p>Body: <%= blog.body %> </p>
+									</a>
+									</header>
+								</section>
+									<% }) %>
+									<% } %>
+						
+						
+						</section>
+					</section>
 							<section id="intro" class="main">
 								<div class="spotlight">
 									<div class="content">
@@ -124,35 +151,7 @@
 								</footer>
 							</section>
 
-							<section id="blogs"  class="main special">
-								<header class="major">
-									<h2>blogs</h2>
-									<p>you can find blogs here</p>
-								</header>
-							</section>
-									
-									<% //console.log( blogs ); %>
-									<% if (blogs.length > 0) { %>
-										<% blogs.forEach(blog => { %>
-											<section class="main">
-											<header class="major">
-											<h2><%= blog.title %> </h2>
-											<p><%= blog.snippet %> </p>
-										</header>
-									</section>
-										<% }) %>
-										<% } %>
-										<section id="blogs"  class="main special">		
-								<footer class="major">
-									<ul class="actions special">
-										<li><a href="/about" class="button primary">Get Started</a></li>
-										<li><a href="/about" class="button">Learn More</a></li>
-									
-									</ul>
-									
-								</footer>
-								</section>
-							</section>
+						
 
 					</div>
 
