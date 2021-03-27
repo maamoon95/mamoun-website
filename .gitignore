@@ -1,4 +1,3 @@
-node_modules/
-logs/git config --global core.excludesFile ~/.gitignore
+node_modules/*
+
 test.sql
-temp/
