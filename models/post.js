@@ -1,25 +1,32 @@
 'use strict';
+const db = require('../config/db');
+const sequelize = require('sequelize');
 const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class posts extends Model {
+  class Post extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      // define association here
+    static associate(moedls) {
+   //   this.belongsTo(User, {
+     //   foreignKey: 'userid',
+      //  targetKey: 'userid'
+   // });
     }
   };
-  posts.init({
+  Post.init({
     ///////////////////
     postid: {
       type:DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
-      allowNull: false
+      allowNull: false,
+      unique: true
+
     },
     //////////////////
     userid: {
@@ -56,21 +63,13 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: "0"
     },
     //////////////////////
-    created_at: {
-      type: DataTypes.DATE,
-    defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
-    field: 'created_at',
-    },
-    ////////////////////////////////////////
-    update_at: {
-      type: DataTypes.DATE,
-    defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
-    field: 'updated_at',
-    },
+ 
     ///////////////////////////////////////
   }, {
     sequelize,
-    modelName: 'posts',
+    tableName: 'posts',
+    modelName: 'Post',
+   // freezeTableName: true,
   });
-  return posts;
+  return Post;
 };

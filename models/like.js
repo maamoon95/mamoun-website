@@ -1,9 +1,11 @@
 'use strict';
+const db = require('../config/db');
+const sequelize = require('sequelize');
 const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class friends extends Model {
+  class Like extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,40 +15,40 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  friends.init({
-    /////////////////////////////////////////////////////////
-    fr_id: {
+  Like.init({
+    /////////////////////////////////
+    like_id: {
       type:DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
-      allowNull: false
+      allowNull: false,
+      unique: true
+
+
     },
-    ///////////////////////////////////////////////////
-    status: {
+    userid: {
+      type:DataTypes.INTEGER,
+      allowNull: false,
+    },
+    ////////////////////////////////////////////////
+    postid: {
+      type:DataTypes.INTEGER,
+      allowNull: false,
+    },
+    /////////////////////////////////////////////
+    reaction_type: {
       type:DataTypes.INTEGER,
       allowNull: false,
       defaultValue: "1"
     },
-    ////////////////////////////////////////////////
-    created_at: {
-      type: DataTypes.DATE,
-    defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
-    field: 'created_at',
-    },
-    ////////////////////////////////////////////////
-    user1id: {
-      type:DataTypes.INTEGER,
-      allowNull: false,
-    },
-    //////////////////////////////////////////////////////////////
-    user2id: {
-      type:DataTypes.INTEGER,
-      allowNull: false,
-    }
-    ////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////
+ 
+  ///////////////////
   }, {
     sequelize,
-    modelName: 'friends',
+    tableName: 'likes',
+    modelName: 'Like',
+ //   freezeTableName: true,
   });
-  return friends;
+  return Like;
 };

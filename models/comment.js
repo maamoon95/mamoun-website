@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
     like_count: {
       type:DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: "1"
+      defaultValue: "0"
     },
     created_at: {
       type: DataTypes.DATE,
@@ -55,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
   },
     update_at: {
       type: DataTypes.DATE,
-    defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+    defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
     field: 'updated_at',
   }
   }, {

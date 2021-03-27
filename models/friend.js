@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class likes extends Model {
+  class friend extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,35 +13,40 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  likes.init({
-    /////////////////////////////////
-    like_id: {
+  friend.init({
+    /////////////////////////////////////////////////////////
+    fr_id: {
       type:DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false
     },
-    ////////////////////////////////////////////////
-    postid: {
-      type:DataTypes.INTEGER,
-      allowNull: false,
-    },
-    /////////////////////////////////////////////
-    reaction_type: {
+    ///////////////////////////////////////////////////
+    status: {
       type:DataTypes.INTEGER,
       allowNull: false,
       defaultValue: "1"
     },
-    ///////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////
     created_at: {
       type: DataTypes.DATE,
     defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
     field: 'created_at',
-  }
-  ///////////////////
+    },
+    ////////////////////////////////////////////////
+    user1id: {
+      type:DataTypes.INTEGER,
+      allowNull: false,
+    },
+    //////////////////////////////////////////////////////////////
+    user2id: {
+      type:DataTypes.INTEGER,
+      allowNull: false,
+    }
+    ////////////////////////////////////////////
   }, {
     sequelize,
-    modelName: 'likes',
+    modelName: 'friend',
   });
-  return likes;
+  return friend;
 };

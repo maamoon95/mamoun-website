@@ -6,31 +6,22 @@ const flash = require('connect-flash');
 const morgan = require('morgan');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
-const JSAlert = require("js-alert");
-const path = require('path');
 const { Sequelize } = require('sequelize');
- //register app
+const path = require('path');
+
 const app = express();
+const { sequelize, User, Post, Like } = require('./models')
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, console.log('server started on port ',PORT));
- //connect to database nad start server
-const dbconnect = new Sequelize('sequelize_db', 'postgres', 's5134747h', {
-    host: 'localhost',
-    dialect: 'postgres'
-    
-         
-      
-});
-// testing connection
-dbconnect.authenticate()
-    .then(() => console.log('db connected seccusfully'))
-    .catch(err => console.log('db error: ' + err))
-    
-    
-  
  //register view engine
-app.set('views', './view');
-app.set('view engine', 'ejs');
+ app.set('views', './view');
+ app.set('view engine', 'ejs');
+// Database connection controller
+require('./controllers/dbconnect');
+// syncing tables
+require('./controllers/tablesync');
+ //starting server localhost
+app.listen(PORT, console.log('server started on port ',PORT));
+
 //using cookies and flash alert system
 app.use(cookieParser());
 app.use(session({ cookie: { maxAge: 60000 }, 
@@ -38,210 +29,98 @@ app.use(session({ cookie: { maxAge: 60000 },
     resave: false, 
     saveUninitialized: false}));
 app.use(flash());
-///////
-
-
-
-app.use(morgan('dev'));
-//middleware and static
-//app.use('/', express.static('client/home'));
-app.use(express.static('./view'));
-//app.use to use methods put and delete from html
-app.use(bodyParser.urlencoded({ extended: false }));
+/////// using express and method override for http requests
+app.use(express.json());
 app.use(methodOverride('_method'));
-//pass data from html post function to here using middleware
-app.use(express.urlencoded({ extended: true }));
 ////////////////////////////////////////////////
-console.log('hi there');
 
 
 
+// List all users
+app.get('/users', async (req, res) => {
+    const id = req.params.id
+    try {
+      const user = await User.findAll()
+      return res.status(200).json(user)
+    } catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Something went wrong' })
+    }
+})
+//// create user
+app.post('/users', async (req, res) => {
+    const { name , password , email } = req.body
 
+    const id = req.params.id
+    try {
+        const user = await User.create({ name, password, email } )
+        return res.json(user)
 
-/////////////////////////////////////////////////////////////
-///
-// sandbox and test creating blog in database
-// app.get('/add-blog', (req, res) => {
-//     //create constant for each blog
-//     const blog = new Blog({
-//         title: 'forth blog',
-//         snippet: 'this is forth tested blog',
-//         body: 'lorem ipsum and asduf ioausd casda'
-//     });
+    }   catch (err) {
+        console.log(err)
+        return res.status(500).json(err)
+      }
+  })
+/////
+//// create Post
+app.post('/post', async (req, res) => {
+    const { userid, body } = req.body;
 
+    try {
+        const user = await Post.create({ userid, body } )
+        return res.json(user)
 
-//     //save blog in database
-//     blog.save()
-//         .then((result) => {
-//             res.send(result)
-//         })
-//         .catch((err) => {
-//             console.log(err);
-//         });
-// });
-// app.get('/all-blog', (req, res) => {
+    }   catch (err) {
+        console.log(err)
+        return res.status(500).json(err)
+      }
+})
   
-//     //fetch blog in database
-//     Blog.find().sort({createdAt: -1 })
-//         .then((result) => {
-//             res.send(result)
-//         })
-//         .catch((err) => {
-//             console.log(err);
-//         });
-// })
+//post Like create action
+app.post('/post/like', async (req, res) => {
+    const { userid, postid } = req.body;
 
+    try {
+        const likecheck = await Like.findOne({ where: { userid, postid } })
+        console.log(likecheck);
+        if (likecheck === null) {
+          
+                const like = await Like.create({ userid, postid })
+        
+     
+                Post.update({ like_count: sequelize.literal('like_count + 1') }, { where: { postid: postid } });
 
-
-// //get index
-
-// app.get('/', (req, res) => {
-//     console.log(req.url);
-//     var urrl = req.url;
-//     const active = '"active"';
-// //fetch blog in database
-// Blog.find().sort( { id: -1 } )
-//     .then((result) => {
-//         const blogs = result;
-//         res.json({ alert });
-//         res.render('index', { title: 'Home', blogs, active , urrl});
-//     })
-//     .catch((err) => {
-//         console.log(err);
-//     })
-// })
-// //get about
-// app.get('/about', (req, res) => {
-//     var urrl = req.url;
-//     const active = '"active"';
-//     res.render('about', {title: 'About', active , urrl});
-
-//     console.log(req.url);
-// });
-// //get create
-// app.get('/blogs', (req, res) => {
-//     var urrl = req.url;
-//     const active = '"active"';
-//     res.render('blogs', { title: 'Create post', active , urrl, flash: req.flash('msg') });
-
-//     console.log(req.url);
-// });
-// // get blog by id
-// app.get('/post/:id', (req, res) => {
-
-//     const id = req.params.id;
-//     Blog.findById(id)
-//         .then(result => {
-//             var urrl = req.url;
-//             const active = '"active"';
-//             const blogs = result;
-//            // console.log(blogs);
-//             res.render('post', { blogs, title: result.title , active , urrl,});
-//         })
-//         .catch(err => {
-//             console.log(err);
-//         })
-// });
-
-// // get blog by id 2 test
-// app.get('/post2/:id', (req, res) => {
-
-//     const id = req.params.id;
-//     Blog.findById(id)
-//         .then(result => {
-//             var urrl = req.url;
-//             const active = '"active"';
-//             const blogs = result;
-//            // console.log(blogs);
-//             res.render('post2', { blogs, title: result.title , active , urrl,});
-//         })
-//         .catch(err => {
-//             console.log(err);
-//         })
-// });
-// //delete blog testt sandbox
-
-// app.delete('/post2/:id', (req, res) => {
-//     const body = req.body;
-//     const id = body.id;
-//     console.log(id);
-  
-//      Blog.findByIdAndDelete(id)
-//        .then(result => {
-//             console.log('deleted test');
+                return res.json(like)
             
-         
-//    })
-//       .catch(err => {
-//           console.log(err);
-//          console.log('error');
-        
-     
-     
-//        });
-//   });
-// //Delete blog
-// app.delete('/blogs/:id', (req, res) => {
- 
-//      Blog.findByIdAndDelete(id)
-//        .then(result => {
-//            console.log('deleted');
-//             res.json({ redirect: '/', alert: 'deleted seccusfully' });
-         
-//       })
-//    .catch(err => {
-//           console.log(err);
-//           console.log('error');
-//           res.json({ redirect: '/' });
-     
-     
-//         });
-//   });
-// //post plog
+        } else {
 
-// app.post('/blogs', (req, res) => {
-//         //create constant for each blog
-//         const blog = new Blog(req.body);
-//         //save blog in database
-//     blog.save()
-//         .then((result) => {
-//                 //function of redirect
+            const likedelete = await Like.findOne({ where: {userid , postid } })
+  
+            await likedelete.destroy()
+            Post.update({ like_count: sequelize.literal('like_count -1') }, { where: { postid: postid } });
+            return res.json({ message: 'like deleted!' })
+        }
+      
 
-//             console.log(result);
-     
-//             req.flash('msg', 'Added to DB Seccusfully');
-//             var message = res.locals.message = req.flash();
-//             var urrl = '/blogs';
-//             const active = '"active"';
-//             res.render('blogs', { title: 'Create post', active , urrl, flash: req.flash('msg') });
-        
-//             console.log(message); // { success_msg: [ 'Successfully Registered' ] }
-               
-              
-              
-        
-//     })
-//     .catch((err) => {
-//         console.log(err);
-         
-//         req.flash('msg', 'eror');
-//         var message = res.locals.message = req.flash();
-//         var urrl = '/blogs';
-//         const active = '"active"';
-//         res.render('blogs', { title: 'Create post', active , urrl, flash: req.flash('msg') });
-    
-//         console.log(message); // { success_msg: [ 'Successfully Registered' ] }
-           
-//     });
+    }   catch (err) {
+        console.log(err)
+        return res.status(500).json(err)
+      }
+})
+/// like delete action 
+app.delete('/post/like', async (req, res) => {
+    const { userid, postid } = req.body;
+    try {
+      const like = await Like.findOne({ where: {userid , postid } })
+  
+      await like.destroy()
+      Post.update({ like_count: sequelize.literal('like_count -1') }, { where: { postid: postid } });
+      return res.json({ message: 'like deleted!' })
+    } catch (err) {
+      console.log(err)
+      const like = await Like.create({ userid, postid })
+      Post.update({ like_count: sequelize.literal('like_count + 1') }, { where: { postid: postid } });
 
-// });
-
-// // get 404
-// app.use((req, res) => {
-//     var urrl = req.url;
-//     const active = '"active"';
-//     res.status(404).render('404', { title: 'Not Found' , active , urrl});
-//     console.log(req.url);
-// });
-
-
+      return res.json(like)
+    }
+  })
