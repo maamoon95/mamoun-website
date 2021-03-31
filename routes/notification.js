@@ -1,14 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const { loggedinstatus } = require('../middleware/authentication');
-const {likefunc} = require('../controllers/likecontroller');
+const { getnotifications } = require('../controllers/notifcontroller');
+
+/// routed notification 
 
 
-//post Like create and delete
-
-// Create post
-router.post('/post/like',loggedinstatus, likefunc,(req, res) => {})
-
+router.get('/notification',loggedinstatus, getnotifications, (req, res) => {})
 
 module.exports = router;
         

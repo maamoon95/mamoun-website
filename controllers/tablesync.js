@@ -1,6 +1,6 @@
 const { Sequelize } = require('sequelize');
 
-const { sequelize, User, Post , Like , Notification , Friend , Profile}  = require('../models')
+const { sequelize,Rtoken,  User, Post , Like , Notification , Friend , Profile}  = require('../models')
 // syncing tables ...
 console.log('syncing tables..');
 //  User.sync({force : false}).then(() => {
@@ -30,4 +30,4 @@ console.log('syncing tables..');
    
 sequelize.sync({force : false}).then(() => {
    console.log('All table synced');
- });
+});

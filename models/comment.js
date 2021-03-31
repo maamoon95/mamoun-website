@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Comment.init({
-    comment_id: {
+    commentid: {
       type:DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -30,20 +30,12 @@ module.exports = (sequelize, DataTypes) => {
       type:DataTypes.INTEGER,
       allowNull: false
     },
-    post_type: {
-      type:DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: "1"
-    },
+    
     body: {
       type:DataTypes.STRING,
       allowNull: false,
-      validate: {
-        notNull: {
-          msg: 'Please enter your name'
-        },
-        notEmpty: true,
-      }
+    
+      
     },
     like_count: {
       type:DataTypes.INTEGER,

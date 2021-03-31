@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     postid: {
       type:DataTypes.INTEGER,
     },
-    comment_id: {
+    commentid: {
       type:DataTypes.INTEGER,
     },
     /////////////////////////////////////
