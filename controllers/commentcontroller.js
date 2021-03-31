@@ -41,7 +41,7 @@ function createcomment(req, res) {
                         // if user found with no error
                         if (user) {
                             // create notification
-                            Notification.create({ userid: postcheck.userid, commentid: comment.commentid, postid, actionid: userid, body: username + ' commented your post :' + '"' + ptitle + '...' + '"', link: "https://localhost/post/" + postcheck.postid  })
+                            Notification.create({ userid: postcheck.userid, commentid: comment.commentid, postid, actionid: userid, body: username + ' commented your post :' + '"' + ptitle + '...' + '"', link: "https://"+process.env.webaddress+"/post/" + postcheck.postid  })
                                 .then(notification => {
                                     console.log('notification sent seccusfully/')
                                     res.json(message = "Comment " + "'" + ptitle + "'" + " sent seccusfully!")

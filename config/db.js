@@ -4,7 +4,7 @@ const path = require('path');
 const express = require('express');
 
 module.exports =  new Sequelize('sequelize_db', 'postgres', 's5134747h', {
-    host: 'localhost',
+    host: process.env.webaddress,
     dialect: 'postgres',
     
   pool: {

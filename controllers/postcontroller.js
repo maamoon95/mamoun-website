@@ -6,7 +6,7 @@ function createpost(req, res) {
     
             .then(post => {
                 var ptitle = body.slice(0, 22) + '...';
-                Notification.create({ userid, actionid: userid, body: 'your post "' + ptitle + '" has been created', postid: post.postid, link: "https://localhost/post/" + post.postid })
+                Notification.create({ userid, actionid: userid, body: 'your post "' + ptitle + '" has been created', postid: post.postid, link: "https://"+process.env.webaddress+"/post/" + post.postid })
                 res.json(post)
             })
             .catch(err => res.status(500).json(err))

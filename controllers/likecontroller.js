@@ -50,7 +50,7 @@ function likefunc(req, res) {
                                 /// const for the post title to put it in notification
                                 var ptitle = post.body.slice(0, 21);
                                 // sending notification
-                                Notification.create({ userid: post.userid, postid, actionid: userid, body: username + ' liked your post ' + '"' + ptitle + '...' + '"', link: "https://localhost/post/" + "?like=" + like.like_id + post.postid })
+                                Notification.create({ userid: post.userid, postid, actionid: userid, body: username + ' liked your post ' + '"' + ptitle + '...' + '"', link: "https://"+process.env.webaddress+"/post/" + "?like=" + like.like_id + post.postid })
                                  // add count
                                  Post.update({ like_count: sequelize.literal('like_count + 1') }, { where: { postid: postid } });
                   return  res.json(like)
